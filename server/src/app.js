@@ -10,9 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: process.env.CLIENT_URL || '*', // Allow specific origin in production
-    credentials: true
+    origin: (process.env.CLIENT_URL || '*').trim(), // Allow specific origin in production, trimmed to remove invisible spaces
+    credentials: true,
 }));
+
+console.log('CORS Origin Configured:', (process.env.CLIENT_URL || '*').trim());
 app.use(helmet());
 app.use(morgan('dev'));
 
