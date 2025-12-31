@@ -62,7 +62,12 @@ const updateUserStatus = async (req, res) => {
             const updatedUser = await user.save();
 
             // Invalidate cache
-            await redisClient.del('/api/users');
+            // Invalidate cache
+            // Get all keys starting with /api/users and delete them
+            const keys = await redisClient.keys('/api/users*');
+            if (keys.length > 0) {
+                await redisClient.del(keys);
+            }
 
             res.json({
                 _id: updatedUser._id,
